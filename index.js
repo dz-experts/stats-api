@@ -9,7 +9,7 @@ var app = express();
 var myRouter = express.Router();
 
 
-myRouter.route('/stats').get(function (req, res) {
+myRouter.route('/history').get(function (req, res) {
     let types = ['Confirmed', 'Deaths', 'Recovered'];
     let data = {};
 
@@ -42,8 +42,19 @@ myRouter.route('/stats').get(function (req, res) {
     function getAllData() {
         return getData(0);
     }
-
     getAllData();
+})
+
+
+
+myRouter.route('/stats').get(function (req, res) {
+    const request = require("request");
+        let url = "https://api.coronatracker.com/v2/analytics/country";
+        request(url, function (error, response, body) {
+            var response = JSON.parse( body ).find(element => element.countryCode == "DZ")
+            res.setHeader("Content-Type", "application/json");
+            res.json(response);
+        });
 })
 
 app.use(myRouter);
