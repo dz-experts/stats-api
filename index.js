@@ -14,7 +14,6 @@ myRouter.route('/stats').get(function (req, res) {
     let data = {};
 
     function getData(type) {
-        console.log(type)
         const request = require("request");
         var prom = request.get("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-" + types[type] + ".csv")   // fetch csv
             .pipe(new StringStream())
