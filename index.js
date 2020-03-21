@@ -34,6 +34,7 @@ myRouter.route('/stats').get(function (req, res) {
             })
         } else {
             return prom.then(() => {
+                res.setHeader("Content-Type", "application/json");
                 return res.json(data);
             })
         }
