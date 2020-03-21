@@ -57,6 +57,16 @@ myRouter.route('/stats').get(function (req, res) {
         });
 })
 
+myRouter.route('/').get(function (req, res) {
+    var paths = [];
+    myRouter.stack.forEach(function(r){
+        if (r.route && r.route.path){
+            paths.push(r.route.path)
+        }
+    })
+    return res.json({"endpoints" : paths});
+})
+
 app.use(myRouter);
 app.listen(port, hostname, function () {
     console.log("http://" + hostname + ":" + port);
