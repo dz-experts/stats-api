@@ -1,0 +1,19 @@
+{
+  "name": "covid19-dz-simple-api",
+  "version": "0.0.1",
+  "description": "A simple Api to provide data about COVID-19 in Algeria ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "author": "Sohaib AFIFI",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^3.2.0",
+    "csv-parse": "^4.8.8",
+    "express": "^4.17.1",
+    "http": "^0.0.0",
+    "request": "^2.88.2",
+    "scramjet": "^4.28.3"
+  }
+}
