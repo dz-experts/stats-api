@@ -1,3 +1,5 @@
+![Build and deploy Docker Image CI](https://github.com/dz-experts/covid19-simple-api/workflows/Build%20and%20deploy%20Docker%20Image%20CI/badge.svg)
+
 # covid19-simple-api
 A simple api to return Confirmed, Deaths and Recovered history for a country
 
