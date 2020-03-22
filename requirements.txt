@@ -1,0 +1,8 @@
+certifi==2019.11.28
+chardet==3.0.4
+fastapi==0.52.0
+idna==2.9
+pydantic==1.4
+requests==2.23.0
+starlette==0.13.2
+urllib3==1.25.8
