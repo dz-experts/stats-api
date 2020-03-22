@@ -3,7 +3,5 @@ version: "2"
 services:
   app:
     build: .
-    environment:
-      - NODE_ENV=production
     ports:
-      - 80:3000
+      - 80:80
