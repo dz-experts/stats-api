@@ -8,7 +8,7 @@ The data are from [CSSE](https://github.com/CSSEGISandData/COVID-19) and
 
 ## Endpoints
 
-check `/docs`
+check [docs](https://stats-api.covid19dz.com/docs) 
 
 # Alternatives :
 
