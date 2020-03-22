@@ -1,0 +1,34 @@
+name: Build and deploy Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag covid19-simple-api:$(date +%s)
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.DEPLOY_SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          git clone https://github.com/dz-experts/covid19-simple-api.git || true
+          cd covid19-simple-api && git pull origin master && docker-compose up -d --build
