@@ -4,7 +4,7 @@ import requests
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def read_root():
     from starlette.responses import RedirectResponse
     response = RedirectResponse(url='/docs')
