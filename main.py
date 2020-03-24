@@ -6,7 +6,7 @@ from starlette.responses import RedirectResponse
 app = FastAPI(
     title="Algeria COVID19 API",
     description="A simple RESTful API to get stats about COVID19 spread in Algeria (confirmed, recovered and deaths)",
-    version="0.0.4",
+    version="0.0.5",
 )
 
 
