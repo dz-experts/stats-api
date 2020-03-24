@@ -58,4 +58,4 @@ def read_history():
                 'Female': wilaya['attributes']['Femelle'],
                 'Male': wilaya['attributes']['Males']
             }
-    return data
+    return [data[x] for x in sorted(data)]
