@@ -37,7 +37,12 @@ def read_history():
 
 @app.get("/wilayas")
 def read_history():
-    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/COVID_wilaya/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Report%20asc&resultOffset=0&resultRecordCount=1000&cacheHint=true"
+    """
+       Get stats per wilaya
+    """
+    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/COVID_wilaya/FeatureServer/0/" \
+          "query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*" \
+          "&orderByFields=Report%20asc&resultOffset=0&resultRecordCount=1000&cacheHint=true "
     r = requests.get(url=url)
     data = list()
     raw_data = list(r.json()["features"])
