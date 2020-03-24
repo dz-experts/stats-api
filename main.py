@@ -34,29 +34,28 @@ def read_history():
     return r.json()["timeline"]
 
 
-
 @app.get("/wilayas")
 def read_history():
     """
        Get stats per wilaya
     """
-    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/COVID_wilaya/FeatureServer/0/" \
-          "query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*" \
-          "&orderByFields=Report%20asc&resultOffset=0&resultRecordCount=1000&cacheHint=true "
+    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya/FeatureServer/0/query?" \
+          "f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
+          "&inSR=102100&outFields=*&outSR=102100&resultType=tile"
     r = requests.get(url=url)
-    data = list()
+    data = dict()
     raw_data = list(r.json()["features"])
-
     for wilaya in raw_data:
-        if(wilaya['attributes']['NOM_WILAYA']):
-            data.append({
-                'name' : wilaya['attributes']['NOM_WILAYA'],
-                'code' : wilaya['attributes']['WILAYA'],
-                'deaths' : wilaya['attributes']['Décés'],
-                'recovered' : wilaya['attributes']['Récupéré'],
-                'confirmed' : wilaya['attributes']['confirmé'],
+        if wilaya['attributes']['NOM_WILAYA']:
+            data[wilaya['attributes']['WILAYA']] = {
+                'name': wilaya['attributes']['NOM_WILAYA'],
+                'name_ar': wilaya['attributes']['wilayat'],
+                'code': wilaya['attributes']['WILAYA'],
+                'deaths': wilaya['attributes']['Décés'],
+                'active': wilaya['attributes']['active'],
+                'recovered': wilaya['attributes']['Récupér'],
+                'confirmed': wilaya['attributes']['Cas_confirm'],
                 'Female': wilaya['attributes']['Femelle'],
-                'Male': wilaya['attributes']['Male']
-            })
+                'Male': wilaya['attributes']['Males']
+            }
     return data
-
