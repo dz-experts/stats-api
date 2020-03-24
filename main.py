@@ -34,6 +34,13 @@ def read_history():
     return r.json()["timeline"]
 
 
+@app.get("/v2/history")
+def read_historyv2():
+    url = "https://pomber.github.io/covid19/timeseries.json"
+    r = requests.get(url=url)
+    return r.json()["Algeria"]
+
+
 @app.get("/wilayas")
 def read_history():
     """
