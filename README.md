@@ -8,7 +8,3 @@ The data are from [Ministère de la Santé - Algérie](http://http://covid19.san
 ## Endpoints
 
 check [docs](https://stats-api.covid19dz.com/docs) 
-
-# Alternatives :
-
-- http://cvdapi.jugurtek.com/api/corona_case_wilaya
