@@ -35,10 +35,26 @@ def read_history():
 
 
 @app.get("/v2/history")
-def read_historyv2():
+def read_history_v2():
+    """
+        Get timeline
+    """
     url = "https://pomber.github.io/covid19/timeseries.json"
     r = requests.get(url=url)
-    return r.json()["Algeria"]
+    timeline = list(r.json()["Algeria"])
+
+    url_last = "https://api.coronatracker.com/v2/analytics/country"
+    r_last = requests.get(url=url_last)
+    last_data = list(filter(lambda element: element["countryName"] == "Algeria", r_last.json()))[0]
+    import dateutil.parser
+    date = dateutil.parser.isoparse(last_data['dateAsOf'])
+    timeline.append({
+        "date": date.strftime('%Y-%m-%d'),
+        "confirmed": last_data['confirmed'],
+        "deaths": last_data['deaths'],
+        "recovered": last_data['recovered']
+    })
+    return timeline
 
 
 @app.get("/wilayas")
