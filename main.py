@@ -82,3 +82,52 @@ def read_history():
                 'Male': wilaya['attributes']['Males']
             }
     return [data[x] for x in sorted(data)]
+
+
+@app.get("/ages")
+def read_ages():
+    """
+       Get stats per age
+    """
+    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya" \
+          "/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
+          "&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22A1_25%22%2C" \
+          "%22outStatisticFieldName%22%3A%22A1_25%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22" \
+          "%3A%22a25_34%22%2C%22outStatisticFieldName%22%3A%22a25_34%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C" \
+          "%22onStatisticField%22%3A%22a35_44%22%2C%22outStatisticFieldName%22%3A%22a35_44%22%7D%2C%7B" \
+          "%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22a45_59%22%2C%22outStatisticFieldName%22%3A" \
+          "%22a45_59%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22A_60%22%2C" \
+          "%22outStatisticFieldName%22%3A%22A_60%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22" \
+          "%3A%22cinqantneuf%22%2C%22outStatisticFieldName%22%3A%22cinqantneuf%22%7D%2C%7B%22statisticType%22%3A" \
+          "%22sum%22%2C%22onStatisticField%22%3A%22soixantedix%22%2C%22outStatisticFieldName%22%3A%22soixantedix%22" \
+          "%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22plus%22%2C%22outStatisticFieldName" \
+          "%22%3A%22plus%22%7D%5D&outSR=102100"
+    r = requests.get(url=url)
+    data = dict()
+    raw_data = r.json()["features"][0]
+    data["1-24"] = raw_data['attributes']["A1_25"]
+    data["25-34"] = raw_data['attributes']["a25_34"]
+    data["35-44"] = raw_data['attributes']["a35_44"]
+    data["45-59"] = raw_data['attributes']["cinqantneuf"]
+    data["60-70"] = raw_data['attributes']["soixantedix"]
+    data["70"] = raw_data['attributes']["plus"]
+    return data
+
+
+@app.get("/sex")
+def read_ages():
+    """
+       Get stats per sex
+    """
+    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya" \
+          "/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
+          "&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Femelle%22" \
+          "%2C%22outStatisticFieldName%22%3A%22Femelle%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C" \
+          "%22onStatisticField%22%3A%22Males%22%2C%22outStatisticFieldName%22%3A%22Males%22%7D%5D&cacheHint=true "
+    r = requests.get(url=url)
+    data = dict()
+    raw_data = r.json()["features"][0]
+    data["Female"] = raw_data['attributes']["Femelle"]
+    data["Male"] = raw_data['attributes']["Males"]
+    return data
+
