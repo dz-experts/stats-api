@@ -58,13 +58,13 @@ def read_history_v2():
 
 
 @app.get("/wilayas")
-def read_history():
+def read_wilayas():
     """
        Get stats per wilaya
     """
-    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya/FeatureServer/0/query?" \
-          "f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
-          "&inSR=102100&outFields=*&outSR=102100&resultType=tile"
+    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/ArcGIS/rest/services/Cas_confirme_wilaya/FeatureServer/0" \
+          "/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*" \
+          "&orderByFields=WILAYA%20ASC&outSR=102100"
     r = requests.get(url=url)
     data = dict()
     raw_data = list(r.json()["features"])
@@ -75,11 +75,28 @@ def read_history():
                 'name_ar': wilaya['attributes']['wilayat'],
                 'code': wilaya['attributes']['WILAYA'],
                 'deaths': wilaya['attributes']['Décés'],
-                'active': wilaya['attributes']['active'],
+                'actives': wilaya['attributes']['active'],
                 'recovered': wilaya['attributes']['Récupér'],
                 'confirmed': wilaya['attributes']['Cas_confirm'],
-                'Female': wilaya['attributes']['Femelle'],
-                'Male': wilaya['attributes']['Males']
+                'suspects': wilaya['attributes']['Cas_suspects'],
+                'sex': {
+                    'female': wilaya['attributes']['Femelle'],
+                    'male': wilaya['attributes']['Males']
+                },
+                'origin': {
+                    'local': wilaya['attributes']['Local'],
+                    'imported': wilaya['attributes']['Imported']
+                },
+                'ages': {
+                    '-5': wilaya['attributes']['A1_25'],
+                    '5-14': wilaya['attributes']['a25_34'],
+                    '15-24': wilaya['attributes']['a35_44'],
+                    '25-34': wilaya['attributes']['a45_59'],
+                    '35-44': wilaya['attributes']['A_60'],
+                    '45-59': wilaya['attributes']['cinqantneuf'],
+                    '60-70': wilaya['attributes']['soixantedix'],
+                    '+70': wilaya['attributes']['plus']
+                }
             }
     return [data[x] for x in sorted(data)]
 
@@ -89,51 +106,42 @@ def read_ages():
     """
        Get stats per age
     """
-    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya" \
-          "/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
-          "&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22A1_25%22%2C" \
-          "%22outStatisticFieldName%22%3A%22A1_25%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22" \
-          "%3A%22a25_34%22%2C%22outStatisticFieldName%22%3A%22a25_34%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C" \
-          "%22onStatisticField%22%3A%22a35_44%22%2C%22outStatisticFieldName%22%3A%22a35_44%22%7D%2C%7B" \
-          "%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22a45_59%22%2C%22outStatisticFieldName%22%3A" \
-          "%22a45_59%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22A_60%22%2C" \
-          "%22outStatisticFieldName%22%3A%22A_60%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22" \
-          "%3A%22cinqantneuf%22%2C%22outStatisticFieldName%22%3A%22cinqantneuf%22%7D%2C%7B%22statisticType%22%3A" \
-          "%22sum%22%2C%22onStatisticField%22%3A%22soixantedix%22%2C%22outStatisticFieldName%22%3A%22soixantedix%22" \
-          "%7D%2C%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22plus%22%2C%22outStatisticFieldName" \
-          "%22%3A%22plus%22%7D%5D&outSR=102100"
-    r = requests.get(url=url)
-    data = dict()
-    raw_data = r.json()["features"][0]
-
-    data["0-5"] = raw_data['attributes']["A1_25"]
-    data["5-14"] = raw_data['attributes']["a25_34"]
-    data["15-24"] = raw_data['attributes']["a35_44"]
-    data["24-34"] = raw_data['attributes']["a45_59"]
-    data["35-44"] = raw_data['attributes']["A_60"]
-    data["45-59"] = raw_data['attributes']["cinqantneuf"]
-    data["60-70"] = raw_data['attributes']["soixantedix"]
-    data["+70"] = raw_data['attributes']["plus"]
-
-    return {'data': data,
-            'note': 'This data is displayed in a wrong order in the website of the ministry. Use with caution',
-            'origin_data': raw_data['attributes']}
+    wilayas = read_wilayas()
+    data = {
+                    '-5': sum(item['ages']['-5'] if item['ages']['-5'] else 0 for item in wilayas),
+                    '5-14': sum(item['ages']['5-14'] if item['ages']['5-14'] else 0 for item in wilayas),
+                    '15-24': sum(item['ages']['15-24'] if item['ages']['15-24'] else 0 for item in wilayas),
+                    '25-34': sum(item['ages']['25-34'] if item['ages']['25-34'] else 0 for item in wilayas) ,
+                    '35-44': sum(item['ages']['35-44'] if item['ages']['35-44'] else 0 for item in wilayas),
+                    '45-59':sum(item['ages']['45-59'] if item['ages']['45-59'] else 0 for item in wilayas),
+                    '60-70': sum(item['ages']['60-70'] if item['ages']['60-70'] else 0 for item in wilayas),
+                    '+70': sum(item['ages']['+70'] if item['ages']['+70'] else 0 for item in wilayas)
+                }
+    return data
 
 
 @app.get("/sex")
-def read_ages():
+def read_sex():
     """
        Get stats per sex
     """
-    url = "https://services9.arcgis.com/jaH8KnBq5el3w2ZR/arcgis/rest/services/Merge_Cas_confirm%C3%A9s_Alger_wilaya" \
-          "/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects" \
-          "&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Femelle%22" \
-          "%2C%22outStatisticFieldName%22%3A%22Femelle%22%7D%2C%7B%22statisticType%22%3A%22sum%22%2C" \
-          "%22onStatisticField%22%3A%22Males%22%2C%22outStatisticFieldName%22%3A%22Males%22%7D%5D&cacheHint=true "
-    r = requests.get(url=url)
-    data = dict()
-    raw_data = r.json()["features"][0]
-    data["Female"] = raw_data['attributes']["Femelle"]
-    data["Male"] = raw_data['attributes']["Males"]
+    wilayas = read_wilayas()
+    data = {
+        'male': sum(item['sex']['male'] if item['sex']['male'] else 0 for item in wilayas),
+        'female': sum(item['sex']['female'] if item['sex']['female'] else 0 for item in wilayas),
+    }
+    return data
+
+
+@app.get("/origins")
+def read_origins():
+    """
+       Get stats per origin
+    """
+    wilayas = read_wilayas()
+    data = {
+        'local': sum(item['origin']['local'] if item['origin']['local'] else 0 for item in wilayas),
+        'imported': sum(item['origin']['imported'] if item['origin']['imported'] else 0 for item in wilayas),
+    }
     return data
 
