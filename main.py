@@ -116,7 +116,7 @@ def read_ages():
     data["+70"] = raw_data['attributes']["plus"]
 
     return {'data': data,
-            'note': 'This data is displayed in a wrong order in the website of the ministry. Use with precaution',
+            'note': 'This data is displayed in a wrong order in the website of the ministry. Use with caution',
             'origin_data': raw_data['attributes']}
 
 
