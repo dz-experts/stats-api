@@ -105,13 +105,19 @@ def read_ages():
     r = requests.get(url=url)
     data = dict()
     raw_data = r.json()["features"][0]
-    data["1-24"] = raw_data['attributes']["A1_25"]
-    data["25-34"] = raw_data['attributes']["a25_34"]
-    data["35-44"] = raw_data['attributes']["a35_44"]
+
+    data["0-5"] = raw_data['attributes']["A1_25"]
+    data["5-14"] = raw_data['attributes']["a25_34"]
+    data["15-24"] = raw_data['attributes']["a35_44"]
+    data["24-34"] = raw_data['attributes']["a45_59"]
+    data["35-44"] = raw_data['attributes']["A_60"]
     data["45-59"] = raw_data['attributes']["cinqantneuf"]
     data["60-70"] = raw_data['attributes']["soixantedix"]
-    data["70"] = raw_data['attributes']["plus"]
-    return data
+    data["+70"] = raw_data['attributes']["plus"]
+
+    return {'data': data,
+            'note': 'This data is displayed in a wrong order in the website of the ministry. Use with precaution',
+            'origin_data': raw_data['attributes']}
 
 
 @app.get("/sex")
