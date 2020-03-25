@@ -29,7 +29,7 @@ def read_stats():
 
 @app.get("/history")
 def read_history():
-    url = "https://corona.lmao.ninja/historical/Algeria"
+    url = "https://corona.lmao.ninja/v2/historical/Algeria"
     r = requests.get(url=url)
     return r.json()["timeline"]
 
