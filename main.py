@@ -24,7 +24,9 @@ def read_stats():
     """
     Get stats
     """
-    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/arcgis/rest/services/DZ_COVID/FeatureServer/2/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Report%20asc&outSR=102100&resultOffset=0&resultRecordCount=1000&cacheHint=true"
+    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/arcgis/rest/services/DZ_COVID/FeatureServer/2/query?f=json&" \
+	"where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Report%20asc&" \
+	"outSR=102100&resultOffset=0&resultRecordCount=1000&cacheHint=false"
     r = requests.get(url=url)
     data = r.json()
     confirmed = max(filter(None, (item["attributes"]["Cumul"] for item in data["features"])))
