@@ -2,6 +2,9 @@ import requests
 
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
+import dateutil.parser
+import datetime
+
 
 app = FastAPI(
     title="Algeria COVID19 API",
@@ -21,10 +24,33 @@ def read_stats():
     """
     Get stats
     """
-    url = "https://api.coronatracker.com/v2/analytics/country"
+    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/arcgis/rest/services/DZ_COVID/FeatureServer/2/query?f=json&" \
+	"where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Report%20asc&" \
+	"outSR=102100&resultOffset=0&resultRecordCount=1000&cacheHint=false"
     r = requests.get(url=url)
     data = r.json()
-    return list(filter(lambda element: element["countryName"] == "Algeria", data))[0]
+    confirmed = max(filter(None, (item["attributes"]["Cumul"] for item in data["features"])))
+    wilayas = read_wilayas()
+    deaths = recovered = male = female = 0
+    for item in wilayas:
+        deaths += item['deaths']
+        recovered += item['recovered']
+        male += item['sex']['male'] if item['sex']['male'] else 0
+        female += item['sex']['female'] if item['sex']['female'] else 0
+    creation_date_in_seconds = round(data["features"][-1]["attributes"]["CreationDate"]/1000)
+
+    return {
+        'countryCode': 'DZ',
+        'countryName': 'Algeria',
+        'confirmed': confirmed,
+        'recovered': recovered,
+        'deaths': deaths,
+        'gender': {
+            'male': male,
+            'female': female
+        },
+        'dateAsOf': datetime.datetime.fromtimestamp(creation_date_in_seconds).isoformat()
+    }
 
 
 @app.get("/history")
@@ -46,7 +72,6 @@ def read_history_v2():
     url_last = "https://api.coronatracker.com/v2/analytics/country"
     r_last = requests.get(url=url_last)
     last_data = list(filter(lambda element: element["countryName"] == "Algeria", r_last.json()))[0]
-    import dateutil.parser
     date = dateutil.parser.isoparse(last_data['dateAsOf'])
     timeline.append({
         "date": date.strftime('%Y-%m-%d'),
