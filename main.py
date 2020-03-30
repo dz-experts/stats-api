@@ -103,14 +103,14 @@ def read_wilayas():
                 'actives': wilaya['attributes']['active'],
                 'recovered': wilaya['attributes']['Récupér'],
                 'confirmed': wilaya['attributes']['Cas_confirm'],
-                'suspects': wilaya['attributes']['Cas_suspects'],
                 'sex': {
                     'female': wilaya['attributes']['Femelle'],
                     'male': wilaya['attributes']['Males']
                 },
                 'origin': {
-                    'local': wilaya['attributes']['Local'],
-                    'imported': wilaya['attributes']['Imported']
+                    'local': 0,
+                    'imported': 0,
+                    'note': 'deprecated'
                 },
                 'ages': {
                     '-5': wilaya['attributes']['A1_25'],
@@ -167,6 +167,7 @@ def read_origins():
     data = {
         'local': sum(item['origin']['local'] if item['origin']['local'] else 0 for item in wilayas),
         'imported': sum(item['origin']['imported'] if item['origin']['imported'] else 0 for item in wilayas),
+        'note': 'deprecated'
     }
     return data
 
