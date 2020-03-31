@@ -13,10 +13,6 @@ uvicorn main:app --reload
 
 ## Endpoints
 
-check [docs](https://stats-api.covid19dz.com/docs)
-
-## Web routes
-
 All routes are available on [docs](https://stats-api.covid19dz.com/docs) or [redoc](https://stats-api.covid19dz.com/redoc) paths with Swagger or ReDoc.
 
 
