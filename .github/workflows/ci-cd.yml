@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag covid19-simple-api:$(date +%s)
+      run: docker build . --file Dockerfile --tag stats-api:$(date +%s)
 
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -30,5 +30,5 @@ jobs:
         key: ${{ secrets.DEPLOY_SSH_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git clone https://github.com/dz-experts/covid19-simple-api.git || true
-          cd covid19-simple-api && git pull origin master && docker-compose up -d --build
+          git clone https://github.com/dz-experts/stats-api.git || true
+          cd stats-api && git pull origin master && docker-compose up -d --build
