@@ -31,5 +31,4 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           git clone https://github.com/dz-experts/stats-api.git || true
-          cd covid19-simple-api && docker-compose down && cd ..
           cd stats-api && git pull origin master && docker-compose up -d --build
