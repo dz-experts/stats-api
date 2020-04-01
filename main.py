@@ -37,7 +37,7 @@ def read_stats():
         recovered += item['recovered']
         male += item['sex']['male'] if item['sex']['male'] else 0
         female += item['sex']['female'] if item['sex']['female'] else 0
-    creation_date_in_seconds = round(data["features"][-1]["attributes"]["CreationDate"]/1000)
+    creation_date_in_seconds = round(data["features"][-1]["attributes"]["Report"]/1000)
 
     return {
         'countryCode': 'DZ',
@@ -103,6 +103,7 @@ def read_wilayas():
                 'actives': wilaya['attributes']['active'],
                 'recovered': wilaya['attributes']['Récupér'],
                 'confirmed': wilaya['attributes']['Cas_confirm'],
+                'new_cases': wilaya['attributes']['new_cases'],
                 'sex': {
                     'female': wilaya['attributes']['Femelle'],
                     'male': wilaya['attributes']['Males']
@@ -113,14 +114,12 @@ def read_wilayas():
                     'note': 'deprecated'
                 },
                 'ages': {
-                    '-5': wilaya['attributes']['A1_25'],
-                    '5-14': wilaya['attributes']['a25_34'],
+                    '-1': wilaya['attributes']['A1_25'],
+                    '1-14': wilaya['attributes']['a25_34'],
                     '15-24': wilaya['attributes']['a35_44'],
-                    '25-34': wilaya['attributes']['a45_59'],
-                    '35-44': wilaya['attributes']['A_60'],
-                    '45-59': wilaya['attributes']['cinqantneuf'],
-                    '60-70': wilaya['attributes']['soixantedix'],
-                    '+70': wilaya['attributes']['plus']
+                    '25-49': wilaya['attributes']['a45_59'],
+                    '50-59': wilaya['attributes']['A_60'],
+                    '+60': wilaya['attributes']['cinqantneuf']
                 }
             }
     return [data[x] for x in sorted(data)]
@@ -133,14 +132,12 @@ def read_ages():
     """
     wilayas = read_wilayas()
     data = {
-                    '-5': sum(item['ages']['-5'] if item['ages']['-5'] else 0 for item in wilayas),
-                    '5-14': sum(item['ages']['5-14'] if item['ages']['5-14'] else 0 for item in wilayas),
+                    '-1': sum(item['ages']['-1'] if item['ages']['-1'] else 0 for item in wilayas),
+                    '1-14': sum(item['ages']['1-14'] if item['ages']['1-14'] else 0 for item in wilayas),
                     '15-24': sum(item['ages']['15-24'] if item['ages']['15-24'] else 0 for item in wilayas),
-                    '25-34': sum(item['ages']['25-34'] if item['ages']['25-34'] else 0 for item in wilayas) ,
-                    '35-44': sum(item['ages']['35-44'] if item['ages']['35-44'] else 0 for item in wilayas),
-                    '45-59':sum(item['ages']['45-59'] if item['ages']['45-59'] else 0 for item in wilayas),
-                    '60-70': sum(item['ages']['60-70'] if item['ages']['60-70'] else 0 for item in wilayas),
-                    '+70': sum(item['ages']['+70'] if item['ages']['+70'] else 0 for item in wilayas)
+                    '25-49': sum(item['ages']['25-49'] if item['ages']['25-49'] else 0 for item in wilayas) ,
+                    '50-59': sum(item['ages']['50-59'] if item['ages']['50-59'] else 0 for item in wilayas),
+                    '+60': sum(item['ages']['+60'] if item['ages']['+60'] else 0 for item in wilayas)
                 }
     return data
 
