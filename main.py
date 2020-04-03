@@ -24,7 +24,7 @@ def read_stats():
     """
     Get stats
     """
-    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/arcgis/rest/services/DZ_COVID/FeatureServer/2/query?f=json&" \
+    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/arcgis/rest/services/COVID_Death_Cumul/FeatureServer/2/query?f=json&" \
 	"where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Report%20asc&" \
 	"outSR=102100&resultOffset=0&resultRecordCount=1000&cacheHint=false"
     r = requests.get(url=url)
@@ -87,7 +87,7 @@ def read_wilayas():
     """
        Get stats per wilaya
     """
-    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/ArcGIS/rest/services/Cas_confirme_wilaya/FeatureServer/0" \
+    url = "https://services8.arcgis.com/yhz7DEAMzdabE4ro/ArcGIS/rest/services/Cas_confirme_view/FeatureServer/0" \
           "/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*" \
           "&orderByFields=WILAYA%20ASC&outSR=102100"
     r = requests.get(url=url)
