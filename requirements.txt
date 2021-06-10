@@ -1,6 +1,6 @@
 certifi==2019.11.28
 chardet==3.0.4
-fastapi==0.52.0
+fastapi==0.65.2
 idna==2.9
 pydantic==1.4
 requests==2.23.0
